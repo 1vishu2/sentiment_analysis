@@ -6,22 +6,25 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
-# ---------------------------
-# NLTK setup (run once)
-# ---------------------------
+# --------------------------------------------------
+# NLTK setup (assumes data already downloaded once)
+# --------------------------------------------------
 nltk.data.path.append(os.path.expanduser("~/nltk_data"))
 
-# ---------------------------
-# Load model & vectorizer
-# ---------------------------
+# --------------------------------------------------
+# Load model & vectorizer (EC2 + Windows safe)
+# --------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-model = joblib.load(os.path.join(BASE_DIR, "pkl", "sentiment_model.pkl"))
-tfidf = joblib.load(os.path.join(BASE_DIR, "pkl", "tfidf_vectorizer.pkl"))
+MODEL_PATH = os.path.join(BASE_DIR, "pkl", "sentiment_model.pkl")
+VECTORIZER_PATH = os.path.join(BASE_DIR, "pkl", "tfidf_vectorizer.pkl")
 
-# ---------------------------
+model = joblib.load(MODEL_PATH)
+tfidf = joblib.load(VECTORIZER_PATH)
+
+# --------------------------------------------------
 # Text preprocessing
-# ---------------------------
+# --------------------------------------------------
 stop_words = set(stopwords.words("english"))
 lemmatizer = WordNetLemmatizer()
 
@@ -32,10 +35,14 @@ def preprocess(text):
     words = [lemmatizer.lemmatize(w) for w in words if w not in stop_words]
     return " ".join(words)
 
-# ---------------------------
+# --------------------------------------------------
 # Streamlit UI
-# ---------------------------
-st.set_page_config(page_title="Sentiment Analyzer", page_icon="🛍️")
+# --------------------------------------------------
+st.set_page_config(
+    page_title="Sentiment Analyzer",
+    page_icon="🛍️",
+    layout="centered"
+)
 
 st.title("🛍️ Product Review Sentiment Analyzer")
 st.write("Enter a product review to predict sentiment")
