@@ -1,20 +1,23 @@
 import streamlit as st
 import joblib
 import re
-import os
 import nltk
+import os
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
-# Ensure nltk data path
-nltk.data.path.append(os.path.expanduser("~/nltk_data"))
+# Download NLTK data
+nltk.download("stopwords")
+nltk.download("wordnet")
+nltk.download("punkt")
 
-# Base directory (sentiment_analysis/)
+# Absolute base path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 MODEL_PATH = os.path.join(BASE_DIR, "pkl", "sentiment_model.pkl")
 VECTORIZER_PATH = os.path.join(BASE_DIR, "pkl", "tfidf_vectorizer.pkl")
 
+# Load model and vectorizer
 model = joblib.load(MODEL_PATH)
 tfidf = joblib.load(VECTORIZER_PATH)
 
@@ -28,13 +31,13 @@ def preprocess(text):
     words = [lemmatizer.lemmatize(w) for w in words if w not in stop_words]
     return " ".join(words)
 
-st.set_page_config(page_title="Sentiment Analyzer", page_icon="🛍️")
-
 st.title("🛍️ Product Review Sentiment Analyzer")
-user_input = st.text_area("Enter your review")
+st.write("Enter a product review to predict sentiment")
+
+user_input = st.text_area("Review Text")
 
 if st.button("Predict Sentiment"):
-    if user_input.strip() == "":
+    if not user_input.strip():
         st.warning("Please enter a review")
     else:
         clean_text = preprocess(user_input)
