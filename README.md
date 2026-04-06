@@ -55,6 +55,5 @@ streamlit run app/app.py
 
 Deployed on AWS EC2 with public access.
 
----
 
 Your Name
