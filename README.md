@@ -57,6 +57,4 @@ Deployed on AWS EC2 with public access.
 
 ---
 
-## 👨‍💻 Author
-
 Your Name
